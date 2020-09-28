@@ -1,0 +1,82 @@
+<html>
+<head>
+	<title>
+		Line
+	</title>
+</head>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+<body>
+	<div style="width:60%;">
+		<canvas id="myChart"></canvas>
+	</div>
+	
+</body>
+
+
+<script>
+			var requestURL = 'https://l1597534561.github.io/data.json';
+			var request = new XMLHttpRequest();
+			request.open('GET', requestURL);
+			request.responseType = 'json';
+			request.send();
+			request.onload = function() {
+			  var cards = request.response;
+			  populateHeader(cards);
+			}
+			
+			function populateHeader(jsonObj) {
+			var cardNumber=jsonObj['cardNumber'];
+			var cardPriceUpDate=jsonObj['upddate'];
+			var cardData=jsonObj['cardPrice'];
+			
+			var ctx = document.getElementById('myChart').getContext('2d');
+			var chart = new Chart(ctx, {
+				// The type of chart we want to create
+				type: 'line',
+
+				// The data for our dataset
+				data: {
+					labels: cardPriceUpDate,
+					datasets: [{
+						label: cardNumber,
+						borderColor: 'rgb(255, 99, 132)',
+						data: cardData
+					}]
+				},
+
+				// Configuration options go here
+				options: {}
+			});
+			}
+			
+			function showHeroes(jsonObj) {
+			  var cardInfo = jsonObj['cardInfo'];
+				  
+			  for(i = 0; i < cardInfo.length; i++) {
+
+				myH2.textContent = cardInfo[i].name;
+				myPara1.textContent = 'Secret identity: ' + cardInfo[i].secretIdentity;
+				myPara2.textContent = 'Age: ' + cardInfo[i].age;
+				myPara3.textContent = 'Superpowers:';
+					
+				var superPowers = cardInfo[i].powers;
+				for(j = 0; j < superPowers.length; j++) {
+				  var listItem = document.createElement('li');
+				  listItem.textContent = superPowers[j];
+				  myList.appendChild(listItem);
+				}
+
+				myArticle.appendChild(myH2);
+				myArticle.appendChild(myPara1);
+				myArticle.appendChild(myPara2);
+				myArticle.appendChild(myPara3);
+				myArticle.appendChild(myList);
+
+				section.appendChild(myArticle);
+			  }
+			}
+</script>
+
+
+
+</html>

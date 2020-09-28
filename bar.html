@@ -1,0 +1,57 @@
+<html>
+<head>
+	<title>
+		Line
+	</title>
+</head>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+<body>
+	<div style="width:60%;">
+	<canvas id="myChart"></canvas>
+	</div>
+	
+	<button></button>
+</body>
+
+
+<script>
+			var requestURL = 'https://l1597534561.github.io/data.json';
+			var request = new XMLHttpRequest();
+			request.open('GET', requestURL);
+			request.responseType = 'json';
+			request.send();
+			request.onload = function() {
+			  var cards = request.response;
+			  populateHeader(cards);
+			}
+			
+			function populateHeader(jsonObj) {
+			var cardNumber=jsonObj['cardNumber'];
+			var cardPriceUpDate=jsonObj['upddate'];
+			var cardData=jsonObj['cardPrice'];
+			
+			var ctx = document.getElementById('myChart').getContext('2d');
+			var chart = new Chart(ctx, {
+				// The type of chart we want to create
+				type: 'bar',
+
+				// The data for our dataset
+				data: {
+					labels: cardPriceUpDate,
+					datasets: [{
+						label: cardNumber,
+						borderColor: 'rgb(255, 99, 132)',
+						data: cardData
+					}]
+				},
+
+				// Configuration options go here
+				options: {}
+			});
+			}
+			
+</script>
+
+
+
+</html>
