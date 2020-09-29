@@ -1,0 +1,159 @@
+<html>
+<head>
+	<title>
+		Line
+	</title>
+</head>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+<body>
+	<div style="width:60%;">
+		<canvas id="myChart"></canvas>
+	</div>
+	<select name="cardTitle" id="cardTitle" onchange="changeTitle();"> 
+		<option value="000/000-000">--選擇主題--</option> 
+	</select> 
+	
+	<select name="cardNumber" id="cardNumber" onchange="changeNumber();"> 
+		<option value="000/000-000">--選擇卡號--</option> 
+	</select> 
+</body>
+
+
+<script>
+			window.onload=function(){
+			  setFun();  
+			}
+
+			var requestURLCardPrice = 'https://l1597534561.github.io/cardData.json';
+			var requestURLCardTitle = 'https://l1597534561.github.io/cardTitle.json';
+			var requestPrice = new XMLHttpRequest();	
+			var requestTitle = new XMLHttpRequest();	
+				
+			function setFun(){
+			  //select 設定
+			  var selectPrice = document.getElementById("cardNumber"); 
+			  selectPrice.length = 1;
+			  selectPrice.options[0].selected = true;	
+
+			  var selectTitle = document.getElementById("cardTitle"); 
+			  selectPrice.length = 1;
+			  selectPrice.options[0].selected = true;	
+			  
+			  //request 設定
+			  requestPrice.open('GET', requestURLCardPrice);
+			  requestPrice.responseType = 'json';
+			  requestPrice.send();	
+			
+			  requestTitle.open('GET', requestURLCardTitle);
+			  requestTitle.responseType = 'json';
+			  requestTitle.send();
+			
+			  requestTitle.onload = function(){
+				var cardsTitle = requestTitle.response;
+				for(var key in cardsTitle){
+					var option = document.createElement("option"); 
+					option.setAttribute("value",key);
+					option.appendChild(document.createTextNode(cardsTitle[key])); 
+					selectTitle.appendChild(option);				
+				}
+			  }
+			  
+			  requestPrice.onload = function(){
+				  var cards = requestPrice.response;
+				  getCardData(cards,'5HY/W83-001');			  
+			  }
+
+			}
+			
+			function changeTitle(){
+			  //select 設定
+			  var selectPrice = document.getElementById("cardNumber"); 
+			  selectPrice.length = 1;
+			  selectPrice.options[0].selected = true;	
+			  
+			  var cardTitle = document.getElementById('cardTitle').value;
+			  
+			  requestPrice.open('GET', requestURLCardPrice);
+			  requestPrice.responseType = 'json';
+			  requestPrice.send();				  
+			  requestPrice.onload = function() {
+			  			  console.log(cardTitle);
+				var cards = requestPrice.response;
+				  for(var key in cards){
+				  console.log();
+					if(key.indexOf(cardTitle)>= 0){
+						var option = document.createElement("option"); 
+						option.setAttribute("value",key);
+						option.appendChild(document.createTextNode(key)); 
+						selectPrice.appendChild(option);
+					}
+				  }			
+			  }
+			}
+			
+			function changeNumber(){
+				requestPrice.open('GET', requestURLCardPrice);
+				requestPrice.responseType = 'json';
+				requestPrice.send();
+				requestPrice.onload = function() {
+				  var cards = requestPrice.response;
+				  var cardNumber = document.getElementById('cardNumber').value;
+				  getCardData(cards,cardNumber)
+				}
+			}
+			
+			function getCardData(jsonObj,cardNum) {
+			console.log(cardNum);
+			  var cardInfo = jsonObj[cardNum];
+				  		
+				var cardNumber=cardNum;
+				var cardPriceUpDate=cardInfo['upddate'];
+				var cardData=cardInfo['cardPrice'];
+				
+				var ctx = document.getElementById('myChart').getContext('2d');
+				var chart = new Chart(ctx, {
+					// The type of chart we want to create
+					type: 'line',
+
+					// The data for our dataset
+					data: {
+						labels: cardPriceUpDate,
+						datasets: [{
+							label: cardNumber,
+							//fill:false,
+							borderColor: 'rgb(255, 99, 132)',
+							data: cardData
+						}],
+					},
+					// Configuration options go here
+					options: {
+						title:{
+							display:true,
+							text:'YuYuTei價格變化'
+						},
+						scales:{
+							xAxes: [{
+								display: true,
+								scaleLabel: {
+									display: true,
+									labelString: '日期'
+								}
+							}],
+							yAxes: [{
+								display: true,
+								scaleLabel: {
+									display: true,
+									labelString: '價格(日幣)'
+								}
+							}]
+						}
+					
+					}
+				});		
+			}
+
+</script>
+
+
+
+</html>
