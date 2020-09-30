@@ -50,12 +50,13 @@
 			
 			  requestTitle.onload = function(){
 				var cardsTitle = requestTitle.response;
-				for(var key in cardsTitle){
-					var option = document.createElement("option"); 
+				for(var key in cardsTitle){	 
+					var option = document.createElement("option");
 					option.setAttribute("value",key);
 					option.appendChild(document.createTextNode(cardsTitle[key])); 
 					selectTitle.appendChild(option);				
 				}
+			
 			  }
 			  
 			  requestPrice.onload = function(){
@@ -86,10 +87,14 @@
 						option.setAttribute("value",key);
 						option.appendChild(document.createTextNode(key)); 
 						selectPrice.appendChild(option);
-					}
+					}					
+				
 				  }			
+				 //重新排列option
+				 sortOption();
 			  }
 			}
+					
 			
 			function changeNumber(){
 				requestPrice.open('GET', requestURLCardPrice);
@@ -152,6 +157,64 @@
 				});		
 			}
 
+			
+			
+			
+			
+		/*	
+		Sort Option			
+		*/
+        function addOption(object, object2) { 
+            each(object2, function(o, index) { 
+                object.options[index] = o; 
+            }) 
+        } 
+        function sortlist(sortName,isDesc) { 
+            var what = document.getElementById(sortName); 
+            this._options = map(what.options, function(o) { 
+                return o; 
+            }); 
+            this._options.sort( function(a, b) { 
+                if (a.text > b.text) { 
+                    return isDesc == true ? 1 : -1; 
+                } else { 
+                    return isDesc == true ? -1 : 1; 
+                } 
+            }); 
+            what.options.length = 0;// clear current options 
+            addOption(what, this._options); 
+        } 
+        function map(object, callback, thisp) { 
+            var ret = []; 
+            each.call(thisp, object, function() { 
+                ret.push(callback.apply(thisp, arguments)); 
+            }); 
+            return ret; 
+        } 
+        function each(object, callback) { 
+            if (undefined === object.length) { 
+                for ( var name in object) { 
+                    if (false === callback(object[name], name, object)) 
+                        break; 
+                } 
+            } else { 
+                for ( var i = 0, len = object.length; i < len; i++) { 
+                    if (i in object) { 
+                        if (false === callback(object[i], i, object)) 
+                            break; 
+                    } 
+                } 
+            } 
+        } 
+        var sOrder = true; 
+        function sortOption(){         
+            if(sOrder){ 
+                sOrder    = false; 
+            }else{ 
+                sOrder    = true; 
+            } 
+            sortlist("cardNumber",sOrder); 
+        } 			
 </script>
 
 
