@@ -28,7 +28,8 @@
 			var requestURLCardTitle = 'https://l1597534561.github.io/cardTitle.json';
 			var requestPrice = new XMLHttpRequest();	
 			var requestTitle = new XMLHttpRequest();	
-				
+
+			
 			function setFun(){
 			  //select 設定
 			  var selectPrice = document.getElementById("cardNumber"); 
@@ -116,17 +117,22 @@
 				}
 			}
 			
+
+			
+			
 			/*繪圖區*/
 			function getCardData(jsonObj,cardNum) {
-			console.log(cardNum);
+			
 			  var cardInfo = jsonObj[cardNum];
-				  		
+						
 				var cardNumber=cardNum;
 				var cardPriceUpDate=cardInfo['upddate'];
 				var cardData=cardInfo['cardPrice'];
-				
-				var ctx = document.getElementById('myChart').getContext('2d');
-				var chart = new Chart(ctx, {
+				 console.log("cardData:"+cardData); 
+				const canvas = document.getElementById('myChart');
+				const ctx = canvas.getContext('2d');
+				const chart = new Chart(ctx, {
+					responsive: true,
 					// The type of chart we want to create
 					type: 'line',
 
@@ -146,6 +152,14 @@
 							display:true,
 							text:'YuYuTei價格變化'
 						},
+					tooltips: {
+						mode: 'index',
+						intersect: false,
+					},
+					hover: {
+						mode: 'nearest',
+						intersect: true
+					},						
 						scales:{
 							xAxes: [{
 								display: true,
@@ -164,6 +178,16 @@
 						}
 					
 					}
+				});		
+
+				/*listener*/				
+				var cardNumberListener = document.getElementById("cardNumber");
+				cardNumberListener.addEventListener("change", function(){
+					chart.destroy();
+				});		
+				var cardTitleListener = document.getElementById("cardTitle");	
+				cardTitleListener.addEventListener("change", function(){
+					chart.destroy();
 				});		
 			}
 
