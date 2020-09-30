@@ -13,7 +13,7 @@
 		<option value="000/000-000">--選擇主題--</option> 
 	</select> 
 	
-	<select name="cardNumber" id="cardNumber" onchange="changeNumber();"> 
+	<select name="cardNumber" id="cardNumber" onchange="changeNumber();" display="tru"> 
 		<option value="000/000-000">--選擇卡號--</option> 
 	</select> 
 </body>
@@ -34,6 +34,7 @@
 			  var selectPrice = document.getElementById("cardNumber"); 
 			  selectPrice.length = 1;
 			  selectPrice.options[0].selected = true;	
+			  selectPrice.style.visibility = 'hidden';
 
 			  var selectTitle = document.getElementById("cardTitle"); 
 			  selectPrice.length = 1;
@@ -67,10 +68,16 @@
 			}
 			
 			function changeTitle(){
+			  sortOption();
 			  //select 設定
 			  var selectPrice = document.getElementById("cardNumber"); 
+			  selectPrice.style.visibility = 'visible';
+			  
 			  selectPrice.length = 1;
 			  selectPrice.options[0].selected = true;	
+			  selectPrice.options[0].setAttribute("id","oldID");
+			  selectPrice.removeChild(document.getElementById('oldID'));
+			  
 			  
 			  var cardTitle = document.getElementById('cardTitle').value;
 			  
@@ -88,11 +95,13 @@
 						option.appendChild(document.createTextNode(key)); 
 						selectPrice.appendChild(option);
 					}					
-				
 				  }			
 				 //重新排列option
 				 sortOption();
+				 selectPrice.options[0].selected=true;
+				 changeNumber();
 			  }
+			  
 			}
 					
 			
@@ -107,6 +116,7 @@
 				}
 			}
 			
+			/*繪圖區*/
 			function getCardData(jsonObj,cardNum) {
 			console.log(cardNum);
 			  var cardInfo = jsonObj[cardNum];
